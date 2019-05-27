@@ -1,0 +1,24 @@
+{
+  "name": "ecc",
+  "version": "1.0.0",
+  "description": "easy clean code",
+  "main": "index.js",
+  "devDependencies": {
+    "prettier": "^1.17.1",
+    "prettier-plugin-apex": "^1.0.0-alpha.9"
+  },
+  "scripts": {
+    "prettier": "prettier",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrowthHeroes/ecc.git"
+  },
+  "author": "Jim Bartek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GrowthHeroes/ecc/issues"
+  },
+  "homepage": "https://github.com/GrowthHeroes/ecc#readme"
+}

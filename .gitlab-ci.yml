@@ -1,0 +1,33 @@
+image: openjdk:8 
+
+include:
+    - template: Code-Quality.gitlab-ci.yml
+    
+stages:
+  - qa
+
+variables:
+  GIT_STRATEGY: fetch
+  GIT_SUBMODULE_STRATEGY: recursive
+
+#job
+code_quality:
+  stage: qa
+
+
+# job
+pmd_analysis:
+  stage: qa
+
+  script:
+    - echo "START PMD analysis"
+    - sh build/pmd/bin/run.sh pmd -d src -R apex-ruleset.xml -f xml | tee pmd-$CI_COMMIT_SHA.xml
+    - echo "END PMD analysis"
+
+  artifacts:
+    paths:  ## Allows download of artifacts
+      - pmd-$CI_COMMIT_SHA.xml  ## for JUnit
+    reports:
+      junit: pmd-$CI_COMMIT_SHA.xml ## for PR/ MR results
+
+  allow_failure: true

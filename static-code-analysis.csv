@@ -1,0 +1,5 @@
+"Problem","Package","File","Priority","Line","Description","Rule set","Rule"
+"1","","/data/dev/git/ecc/sfdx-source/ecc/main/default/classes/Opportunity_TriggerHandler.cls","3","2","Avoid empty block statements.","Error Prone","EmptyStatementBlock"
+"2","","/data/dev/git/ecc/sfdx-source/ecc/main/default/classes/Opportunity_TriggerHandler.cls","3","2","Avoid long parameter lists.","Design","ExcessiveParameterList"
+"1","","/data/dev/git/ecc/sfdx-source/ecc/main/default/classes/myClass_Tests.cls","3","5","'System.assert' should have 2 parameters.","Best Practices","ApexAssertionsShouldIncludeMessage"
+"2","","/data/dev/git/ecc/sfdx-source/ecc/main/default/classes/myClass_Tests.cls","3","10","'System.assert' should have 2 parameters.","Best Practices","ApexAssertionsShouldIncludeMessage"

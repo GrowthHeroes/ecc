@@ -1,0 +1,6 @@
+build/pmd
+.sfdx
+.vscode
+node_modules
+assets/server.key
+build/pmd-output.csv
