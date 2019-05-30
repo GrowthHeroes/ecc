@@ -1,5 +1,7 @@
 # Easy Clean Code (ECC)
 
+![tdx](https://www.ceptes.com/wp-content/uploads/TrailheaDX-Developers-Conference-2019.png)
+
 ## TLDR;  CLI setup
 
 * Fork this
