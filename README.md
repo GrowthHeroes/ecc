@@ -68,6 +68,9 @@ https://github.com/forcedotcom/sfdx-circleci
 
 * add server.key.enc to /assets
 
+## Automate Apex Tests with Gitlab
+https://gitlab.com/sfdx
+
 ## Automate PMD, ESLint, etc. with Codacy
 
 * It will honor/use the apex-ruleset.xml file if you have one for PMD
