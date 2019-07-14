@@ -1,0 +1,12 @@
+# https://support.codacy.com/hc/en-us/articles/360005097654-Ignore-files-from-Codacy-analysis
+
+exclude_paths:
+  - '**/*-meta.xml' # ignore all meta files in all folders
+  - '**/staticresources/**/*'  # ignores all subfolders of static resources
+  - '.idea/**'
+  - '.sfdx/**'
+  - '.vscode/**'
+  - 'config/**'
+  - 'build/**'
+  - 'assets/**'
+  - 'dev-tools/**'
