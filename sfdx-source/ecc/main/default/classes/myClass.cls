@@ -1,10 +1,9 @@
-public class myClass{
+public class myClass {
+  // Additional myClass code here
 
-      // Additional myClass code here 
-
-  class myInnerClass{
-
-     // myInnerClass code here
-
+  class myInnerClass {
+    // myInnerClass code here
   }
+
+  // myInnerClass code here
 }
