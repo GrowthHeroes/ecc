@@ -1,0 +1,72 @@
+name: PMD Review - Full
+# These are the PMD checks that happen when called in the Github UI
+# https://github.com/marketplace/actions/pmd-analyser
+
+on:
+  # push:
+  # workflow_dispatch allows this job to be run from Github Actions UI
+  workflow_dispatch:
+
+jobs:
+
+  # Run a loose ruleset against all the code in the code base and post a comment
+  pmd-full:
+    name: Analyze
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          # Incremental diffs require fetch depth to be at 0 to grab the target branch
+          fetch-depth: '0'
+
+      # this allows the .sh file to be run
+      - name: Make file executable
+        run: chmod +x ./.github/pmd-analyzer/pmd-analyzer.sh
+
+      - name: Run Analysis
+        id: pmd-analysis
+        uses: ./.github/pmd-analyzer
+        with:
+          # set this to false if you want to only look at the changed files
+          analyse-all-code: 'true'
+
+          # the folder that houses all the classes and lwc to be scanned. May be different depending on the project
+          file-path: './force-app'
+
+          # The ruleset PMD will use
+          # This one is very loose and is not designed to cause failures
+          rules-path: './.github/pmd-analyzer/pmd-ruleset-full.xml'
+
+          # Post a comment with all the results from the full analysis
+          post-comment: 'true'
+      
+      # This step will post the comment in the job steps so it is easy to view from the job
+      - name: Log Comment
+        run: |
+          if ${{ steps.pmd-analysis.outputs.errors-found }}
+          then
+            echo "Warnings Found"
+            echo "${{ steps.pmd-analysis.outputs.error-detail }}"
+          fi
+
+      # Post the results on  Github under the bot account
+      - name: Post Error Comment
+        if: ${{ steps.pmd-analysis.outputs.errors-found }} == 'true'
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            The PMD Analysis was performed on the entire code base.
+            Here are the results for the full code base:
+
+            ${{ steps.pmd-analysis.outputs.error-detail }}
+            ${{ steps.pmd-analysis.outputs.error-priority-2 }} Priority 2 errors were found.
+            ${{ steps.pmd-analysis.outputs.error-priority-3 }} Priority 3 errors were found.
+
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          
+          # Can be restricted to not allow duplicate messages
+          allow-repeats: true
+

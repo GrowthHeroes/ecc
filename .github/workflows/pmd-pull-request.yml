@@ -1,0 +1,68 @@
+name: PMD Review - Changed Files
+# These are the PMD checks that happen on push
+# https://github.com/marketplace/actions/pmd-analyser
+
+on:
+  # pull_request will run when the PR is opened and every commit after that
+  pull_request:
+    # you can limit it to specific branches if you want
+    branches:
+      - '1---Develop'
+
+jobs:
+  # This job will check all the files changed in the PR against the strict ruleset
+  pmd-dif:
+    name: Analyze
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          # Incremental diffs require fetch depth to be at 0 to grab the target branch
+          fetch-depth: '0'
+
+      - name: Make file executable
+        run: chmod +x ./.github/pmd-analyzer/pmd-analyzer.sh
+
+      - name: Run Analysis
+        id: pmd-analysis
+        uses: ./.github/pmd-analyzer
+        with:
+          # set this to false if you want to only look at the changed files
+          analyse-all-code: 'false'
+
+          # the folder that houses all the classes and lwc to be scanned. May be different depending on the project
+          file-path: './force-app/*'
+
+          # The ruleset PMD will use
+          rules-path: './.github/pmd-analyzer/pmd-ruleset-diff.xml'
+
+          # Post a comment with all the results from the diff analysis
+          post-comment: 'true'
+      
+      # This step will post the comment in the job steps so it is easy to view from the job
+      - name: Log Comment
+        run: |
+          if ${{ steps.pmd-analysis.outputs.errors-found }}
+          then
+            echo "Warnings Found"
+            echo "${{ steps.pmd-analysis.outputs.error-detail }}"
+          fi
+
+      # Post the results on Github under the bot account
+      - name: Post Error Comment
+        uses: mshick/add-pr-comment@v1
+        with:
+          message: |
+            The PMD Analysis was on the files you've changed in this PR.
+
+            ${{ steps.pmd-analysis.outputs.error-detail }}
+            ${{ steps.pmd-analysis.outputs.error-priority-2 }} Priority 2 errors were found.
+            ${{ steps.pmd-analysis.outputs.error-priority-3 }} Priority 3 errors were found.
+
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          
+          # Can be restricted to not allow duplicate messages
+          allow-repeats: true

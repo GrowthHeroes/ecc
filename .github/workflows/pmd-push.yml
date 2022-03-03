@@ -1,0 +1,40 @@
+name: PMD Quick Review
+# These are the PMD checks that happen on push
+# https://github.com/marketplace/actions/pmd-analyser
+
+on:
+  # push means it will happen every time the code is pushed to github
+  push:
+
+jobs:
+  pmd-review:
+    name: Commit Files
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          # Incremental diffs require fetch depth to be at 0 to grab the target branch
+          fetch-depth: '0'
+
+      - name: Make file executable
+        run: chmod +x ./.github/pmd-analyzer/pmd-analyzer.sh
+
+      - name: Run Analysis
+        id: pmd-diff-analysis
+        uses: ./.github/pmd-analyzer
+        with:
+          # set this to false if you want to only look at the changed files
+          analyse-all-code: 'false'
+
+          # the folder that houses all the classes and lwc to be scanned. May be different depending on the project
+          file-path: './force-app'
+
+          # The ruleset PMD will use
+          rules-path: './.github/pmd-analyzer/pmd-ruleset-diff.xml'
+
+
